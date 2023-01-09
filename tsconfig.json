@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "ES2015",
+    "target": "ES2017",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outDir": "build/",
+    "sourceMap": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.ts.spec"]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "emojicore",
+  "version": "0.0.1",
+  "description": "emojicore is an interpreted toy programming language with two basic primitives, ints and ents.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ts:build": "rm -rf build/; tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phea/emojicore.git"
+  },
+  "keywords": [
+    "programming",
+    "language"
+  ],
+  "author": "Phea Duch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/phea/emojicore/issues"
+  },
+  "homepage": "https://github.com/phea/emojicore#readme",
+  "dependencies": {
+    "typescript": "^4.9.4"
+  }
+}
