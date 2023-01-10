@@ -4,7 +4,7 @@
   "description": "emojicore is an interpreted toy programming language with two basic primitives, ints and ents.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "ts:build": "rm -rf build/; tsc"
   },
   "repository": {
@@ -23,5 +23,14 @@
   "homepage": "https://github.com/phea/emojicore#readme",
   "dependencies": {
     "typescript": "^4.9.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.18.6",
+    "@types/jest": "^29.2.5",
+    "babel-jest": "^29.3.1",
+    "jest": "^29.3.1",
+    "ts-jest": "^29.0.3"
   }
 }
