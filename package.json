@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "emojicore is an interpreted toy programming language with two basic primitives, ints and ents.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "jest",
     "ts:build": "rm -rf build/; tsc"
@@ -22,6 +23,8 @@
   },
   "homepage": "https://github.com/phea/emojicore#readme",
   "dependencies": {
+    "@types/sprintf-js": "^1.1.2",
+    "sprintf-js": "^1.1.2",
     "typescript": "^4.9.4"
   },
   "devDependencies": {

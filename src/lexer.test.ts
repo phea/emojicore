@@ -1,5 +1,5 @@
-import { Lexer } from './lexer';
-import * as Token from './token';
+import { Lexer } from './lexer.js';
+import * as Token from './token.js';
 
 describe('lexer should return right token (basic)', () => {
   const input = '=+(),;*/- ++ -- //';
