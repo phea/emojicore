@@ -17,6 +17,11 @@ export const PLUS: TokenType = '+';
 export const MINUS: TokenType = '-';
 export const ASTERIK: TokenType = '*';
 export const SLASH: TokenType = '/';
+export const BANG: TokenType = '!';
+export const LT: TokenType = '<';
+export const GT: TokenType = '>';
+export const EQL: TokenType = '==';
+export const NOT_EQL: TokenType = '!=';
 export const UNARY_ADD: TokenType = '++';
 export const UNARY_MINUS: TokenType = '--';
 
@@ -59,4 +64,9 @@ interface Keywords {
 export const keywords: Keywords = {
   let: new Token(LET),
   func: new Token(FUNCTION),
+  true: new Token(TRUE),
+  false: new Token(FALSE),
+  if: new Token(IF),
+  else: new Token(ELSE),
+  return: new Token(RETURN),
 };

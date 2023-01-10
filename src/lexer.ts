@@ -61,6 +61,10 @@ export class Lexer {
 
     if (this.ch === '=') {
       tok = new Token.Token(Token.ASSIGN);
+      if (this.peekChar() === '=') {
+        this.readChar();
+        tok = new Token.Token(Token.EQL);
+      }
     } else if (this.ch === ';') {
       tok = new Token.Token(Token.SEMICOLON);
     } else if (this.ch === '(') {
@@ -73,6 +77,16 @@ export class Lexer {
       tok = new Token.Token(Token.RBRACE);
     } else if (this.ch === ',') {
       tok = new Token.Token(Token.COMMA);
+    } else if (this.ch === '!') {
+      tok = new Token.Token(Token.BANG);
+      if (this.peekChar() === '=') {
+        this.readChar();
+        tok = new Token.Token(Token.NOT_EQL);
+      }
+    } else if (this.ch === '<') {
+      tok = new Token.Token(Token.LT);
+    } else if (this.ch === '>') {
+      tok = new Token.Token(Token.GT);
     } else if (this.ch === '+') {
       if (this.peekChar() === '+') {
         this.readChar();
