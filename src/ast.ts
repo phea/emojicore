@@ -5,11 +5,11 @@ interface INode {
   tokenLiteral(): string;
 }
 
-interface StatementNode {
+export interface StatementNode {
   statementNode(): void;
 }
 
-interface ExpressionNode {
+export interface ExpressionNode {
   expressionNode(): void;
 }
 
