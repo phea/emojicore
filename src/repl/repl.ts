@@ -1,10 +1,11 @@
-import * as readline from 'readline';
-import { sprintf } from 'sprintf-js';
-import * as Token from '../token.js';
-import { Lexer } from '../lexer.js';
+import readline = require('readline/promises');
+import sprintf = require('sprintf-js');
+import Token = require('../token');
+import pkg = require('../lexer');
+const { Lexer } = pkg;
 
 const printf = function (...args: any[]): number {
-  var o = sprintf.apply(sprintf, arguments);
+  var o = sprintf.sprintf.apply(sprintf, arguments);
   console.log(o);
   return o.length;
 };

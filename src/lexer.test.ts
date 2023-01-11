@@ -1,5 +1,5 @@
-import { Lexer } from './lexer.js';
-import * as Token from './token.js';
+import { Lexer } from './lexer';
+import * as Token from './token';
 
 describe('lexer should return right token (basic)', () => {
   const input = '=+(),;*/- ++ -- //';
@@ -123,8 +123,7 @@ if (5 < 10) {
     [Token.NOT_EQL, '!='],
     [Token.INT, '9'],
     [Token.SEMICOLON, ';'],
-
-    // [Token.EOF, 'eof'],
+    [Token.EOF, 'eof'],
   ];
 
   let lex = new Lexer(input);

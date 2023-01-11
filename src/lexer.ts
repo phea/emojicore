@@ -1,4 +1,4 @@
-import * as Token from './token.js';
+import * as Token from './token';
 
 export class Lexer {
   input: Array<string>;
