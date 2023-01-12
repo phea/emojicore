@@ -3,13 +3,14 @@ import { Token } from './token';
 
 interface INode {
   tokenLiteral(): string;
+  toString(): string;
 }
 
-export interface StatementNode {
+export interface StatementNode extends INode {
   statementNode(): void;
 }
 
-export interface ExpressionNode {
+export interface ExpressionNode extends INode {
   expressionNode(): void;
 }
 
@@ -29,8 +30,8 @@ class Node implements INode {
 }
 
 export class LetStatement extends Node implements StatementNode {
-  name: string;
-  value: string;
+  name: Identifier;
+  value: Node;
 
   constructor() {
     super(new Token(tok.LET));
@@ -43,7 +44,23 @@ export class LetStatement extends Node implements StatementNode {
   }
 
   toString() {
-    return `LET ${this.name.toString()} = ${this.value}`;
+    return `let ${this.name.toString()} = ${this.value};`;
+  }
+}
+
+export class ReturnStatement extends Node implements StatementNode {
+  returnValue: ExpressionNode;
+
+  constructor() {
+    super(new Token(tok.RETURN));
+  }
+
+  statementNode(): void {
+    //
+  }
+
+  toString() {
+    return this.token.literal;
   }
 }
 
@@ -55,7 +72,9 @@ export class Identifier extends Node implements ExpressionNode {
     this.value = value;
   }
 
-  expressionNode(): void {}
+  expressionNode(): void {
+    //
+  }
 
   tokenLiteral(): string {
     return this.token.literal;
@@ -66,7 +85,69 @@ export class Identifier extends Node implements ExpressionNode {
   }
 }
 
-class Program {
+export class IntegerLiteral extends Node implements ExpressionNode {
+  value: string;
+  constructor(value: string) {
+    super(new Token(tok.INT));
+    this.value = value;
+  }
+
+  expressionNode(): void {
+    //
+  }
+
+  tokenLiteral(): string {
+    return this.token.literal;
+  }
+
+  toString(): string {
+    return this.token.literal;
+  }
+}
+
+export class BangExpression extends Node implements ExpressionNode {
+  right: ExpressionNode;
+  constructor(right: ExpressionNode) {
+    super(new Token(tok.BANG));
+    this.right = right;
+  }
+
+  expressionNode(): void {
+    //
+  }
+
+  tokenLiteral(): string {
+    return this.token.literal;
+  }
+
+  toString() {
+    return '!' + this.right.toString();
+  }
+}
+
+export class ExpressionStatement extends Node implements StatementNode {
+  expression: ExpressionNode;
+  constructor(token: Token) {
+    super(token);
+  }
+
+  statementNode(): void {
+    //
+  }
+
+  tokenLiteral(): string {
+    return this.token.literal;
+  }
+
+  toString(): string {
+    if (this.expression !== null) {
+      return this.expression.toString();
+    }
+    return '';
+  }
+}
+
+export class Program {
   statements: StatementNode[];
   constructor() {
     this.statements = [];
@@ -77,6 +158,10 @@ class Program {
     this.statements.forEach((stmt) => {
       buf += stmt.toString();
     });
+
+    if (buf[buf.length - 1] !== ';') {
+      buf += ';';
+    }
     return buf;
   }
 }
