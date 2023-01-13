@@ -68,7 +68,7 @@ export class Identifier extends Node implements ExpressionNode {
   value: string;
 
   constructor(value: string) {
-    super(new Token(tok.IDENT));
+    super(new Token(tok.IDENT, value));
     this.value = value;
   }
 
@@ -88,7 +88,7 @@ export class Identifier extends Node implements ExpressionNode {
 export class IntegerLiteral extends Node implements ExpressionNode {
   value: string;
   constructor(value: string) {
-    super(new Token(tok.INT));
+    super(new Token(tok.INT, value));
     this.value = value;
   }
 
@@ -121,7 +121,28 @@ export class BangExpression extends Node implements ExpressionNode {
   }
 
   toString() {
-    return '!' + this.right.toString();
+    return '!' + this.right.tokenLiteral();
+  }
+}
+
+export class InfixExpression extends Node implements ExpressionNode {
+  left: ExpressionNode;
+  right: ExpressionNode;
+
+  constructor(left: ExpressionNode, op: TokenType) {
+    super(new Token(op));
+    this.left = left;
+  }
+
+  expressionNode(): void {
+    //
+  }
+  tokenLiteral(): string {
+    return this.token.literal;
+  }
+
+  toString(): string {
+    return `${this.left} ${this.token} ${this.right}`;
   }
 }
 

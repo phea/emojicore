@@ -15,7 +15,7 @@ export const ENT: TokenType = 'ENT';
 export const ASSIGN: TokenType = '=';
 export const PLUS: TokenType = '+';
 export const MINUS: TokenType = '-';
-export const ASTERIK: TokenType = '*';
+export const ASTERISK: TokenType = '*';
 export const SLASH: TokenType = '/';
 export const BANG: TokenType = '!';
 export const LT: TokenType = '<';

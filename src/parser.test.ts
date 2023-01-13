@@ -83,8 +83,43 @@ describe('parser should handle integer literals', () => {
 });
 
 describe('parser should handle bang operator', () => {
-  test('bang operator', () => {
-    // !false, true
-    // !(expression)
+  let tests = [['!5;', '5']];
+
+  test.each(tests)('expected proper BANG parsing', (input, rightLiteral) => {
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    expect(program.statements.length).toEqual(1);
+    expect(program.statements[0]).toBeInstanceOf(ast.ExpressionStatement);
+    // TODO: test out expression literal string
+  });
+});
+
+describe('parser should handle parsing infix operator', () => {
+  const tests = [
+    ['3 + 5;', '+'],
+    ['3 - 5;', '-'],
+    ['3 * 5;', '*'],
+    ['3 / 5;', '/'],
+    ['3 > 5;', '>'],
+    ['3 < 5;', '<'],
+    ['3 == 5;', '=='],
+    ['3 != 5;', '!='],
+  ];
+
+  test.each(tests)('infix operator test:', (input, op) => {
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    expect(program.statements.length).toEqual(1);
+    expect(program.statements[0]).toBeInstanceOf(ast.ExpressionStatement);
+
+    let stmt = program.statements[0] as ast.ExpressionStatement;
+    let expr = stmt.expression as ast.InfixExpression;
+    expect(expr.left.tokenLiteral()).toEqual('3');
+    expect(expr.tokenLiteral()).toEqual(op);
+    expect(expr.right.tokenLiteral()).toEqual('5');
   });
 });

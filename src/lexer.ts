@@ -102,7 +102,7 @@ export class Lexer {
         tok = new Token.Token(Token.MINUS);
       }
     } else if (this.ch === '*') {
-      tok = new Token.Token(Token.ASTERIK);
+      tok = new Token.Token(Token.ASTERISK);
     } else if (this.ch === '/') {
       if (this.peekChar() === '/') {
         this.readChar();
