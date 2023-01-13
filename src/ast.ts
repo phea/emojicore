@@ -121,7 +121,7 @@ export class BangExpression extends Node implements ExpressionNode {
   }
 
   toString() {
-    return '!' + this.right.tokenLiteral();
+    return `(!${this.right.tokenLiteral()})`;
   }
 }
 
@@ -142,7 +142,7 @@ export class InfixExpression extends Node implements ExpressionNode {
   }
 
   toString(): string {
-    return `${this.left} ${this.token} ${this.right}`;
+    return `(${this.left} ${this.token} ${this.right})`;
   }
 }
 

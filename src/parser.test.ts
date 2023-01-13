@@ -123,3 +123,29 @@ describe('parser should handle parsing infix operator', () => {
     expect(expr.right.tokenLiteral()).toEqual('5');
   });
 });
+
+describe('test order of operations', () => {
+  const tests = [
+    ['a * b', '(a * b)'],
+    ['!a', '(!a)'],
+    ['a + b + c', '((a + b) + c)'],
+    ['a + b - c', '((a + b) - c)'],
+    ['a * b * c', '((a * b) * c)'],
+    ['a * b / c', '((a * b) / c)'],
+    ['a + b * c', '(a + (b * c))'],
+    ['a + b * c + d / e - f', '(((a + (b * c)) + (d / e)) - f)'],
+    ['5 > 4 == 3 < 4', '((5 > 4) == (3 < 4))'],
+    ['5 < 4 != 3 > 4', '((5 < 4) != (3 > 4))'],
+    ['3 + 4 * 5 == 3 * 1 + 4 * 5', '((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))'],
+  ];
+
+  test.each(tests)('%#: order of operations precendence testing: "%s"', (input, expected) => {
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    expect(program.statements[0]).toBeInstanceOf(ast.ExpressionStatement);
+    let stmt = program.statements[0] as ast.ExpressionStatement;
+    expect(stmt.toString()).toEqual(expected);
+  });
+});

@@ -53,7 +53,8 @@ export class Token {
   }
 
   toString() {
-    return `[${this.type}]: ${this.literal}`;
+    // return `[${this.type}]: ${this.literal}`;
+    return this.literal;
   }
 }
 
