@@ -185,3 +185,23 @@ describe('parser should handle booleans', () => {
     expect(stmt.token.literal).toBe('false');
   });
 });
+
+describe('parser should handle if statements', () => {
+  test('basic if', () => {
+    const input = 'if (x < y) { x }';
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    expect(program.statements.length).toEqual(1);
+  });
+
+  test('basic if-else', () => {
+    const input = 'if (x < y) { x } else { y }';
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    expect(program.statements.length).toEqual(1);
+  });
+});

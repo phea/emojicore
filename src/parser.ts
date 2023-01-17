@@ -50,6 +50,7 @@ export class Parser {
     this.registerPrefix(tok.TRUE, this.parseBoolean);
     this.registerPrefix(tok.FALSE, this.parseBoolean);
     this.registerPrefix(tok.LPAREN, this.parseGroupedExpression);
+    this.registerPrefix(tok.IF, this.parseIfExpression);
 
     // Register infix parse tokens
     this.registerInfix(tok.PLUS);
@@ -154,6 +155,46 @@ export class Parser {
     }
 
     return exp;
+  }
+
+  parseIfExpression() {
+    let expr = new ast.IfExpression();
+    if (!this.expectPeek(tok.LPAREN)) {
+      return null;
+    }
+
+    this.nextToken();
+    expr.condition = this.parseExpression(Precendence.LOWEST);
+    if (!this.expectPeek(tok.RPAREN)) {
+      return null;
+    }
+    if (!this.expectPeek(tok.LBRACE)) {
+      return null;
+    }
+
+    expr.consequence = this.parseBlockStatement();
+    if (this.peekTokenIs(tok.ELSE)) {
+      this.nextToken();
+      if (!this.expectPeek(tok.LBRACE)) {
+        return null;
+      }
+      expr.alternative = this.parseBlockStatement();
+    }
+    return expr;
+  }
+
+  parseBlockStatement() {
+    let block = new ast.BlockStatement();
+    this.nextToken();
+
+    while (!this.curTokenIs(tok.RBRACE) && !this.curTokenIs(tok.EOF)) {
+      let stmt = this.parseStatement();
+      if (stmt !== undefined) {
+        block.statements.push(stmt);
+      }
+      this.nextToken();
+    }
+    return block;
   }
 
   parseExpression(precedence: Precendence) {

@@ -170,6 +170,57 @@ export class InfixExpression extends Node implements ExpressionNode {
   }
 }
 
+export class IfExpression extends Node implements ExpressionNode {
+  condition: ExpressionNode;
+  consequence: BlockStatement;
+  alternative: BlockStatement;
+
+  constructor() {
+    super(new Token(tok.IF));
+  }
+
+  expressionNode(): void {
+    //
+  }
+
+  tokenLiteral(): string {
+    return this.token.literal;
+  }
+
+  toString(): string {
+    let buf = '';
+    buf += `if${this.condition.toString()} ${this.consequence.toString()}`;
+
+    if (this.alternative !== undefined) {
+      buf += `else ${this.alternative.toString()}`;
+    }
+    return buf;
+  }
+}
+
+export class BlockStatement extends Node implements StatementNode {
+  statements: StatementNode[];
+  constructor() {
+    super(new Token(tok.LBRACE));
+    this.statements = [];
+  }
+
+  statementNode(): void {
+    //
+  }
+
+  tokenLiteral(): string {
+    return this.token.literal;
+  }
+
+  toString() {
+    let buf = '';
+    this.statements.forEach((stmt) => {
+      buf += stmt.toString();
+    });
+    return buf;
+  }
+}
 export class ExpressionStatement extends Node implements StatementNode {
   expression: ExpressionNode;
   constructor(token: Token) {
