@@ -47,6 +47,8 @@ export class Parser {
     this.registerPrefix(tok.IDENT, () => new ast.Identifier(this.curToken.literal));
     this.registerPrefix(tok.INT, this.parseIntegerLiteral);
     this.registerPrefix(tok.BANG, this.parseBangExpression);
+    this.registerPrefix(tok.TRUE, this.parseBoolean);
+    this.registerPrefix(tok.FALSE, this.parseBoolean);
 
     // Register infix parse tokens
     this.registerInfix(tok.PLUS);
@@ -137,6 +139,10 @@ export class Parser {
     this.nextToken(); // have to bind this to the  class
     const right = this.parseExpression(Precendence.PREFIX); // Prefix.PRECEDENCE
     return new ast.BangExpression(right);
+  }
+
+  parseBoolean() {
+    return new ast.Boolean(this.curTokenIs(tok.TRUE));
   }
 
   parseExpression(precedence: Precendence) {

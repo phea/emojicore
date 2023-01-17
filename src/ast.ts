@@ -105,6 +105,30 @@ export class IntegerLiteral extends Node implements ExpressionNode {
   }
 }
 
+export class Boolean extends Node implements ExpressionNode {
+  value: boolean;
+  constructor(val: boolean) {
+    if (val) {
+      super(new Token(tok.TRUE));
+    } else {
+      super(new Token(tok.FALSE));
+    }
+    this.value = val;
+  }
+
+  expressionNode(): void {
+    //
+  }
+
+  tokenLiteral(): string {
+    return this.token.literal;
+  }
+
+  toString(): string {
+    return this.token.literal;
+  }
+}
+
 export class BangExpression extends Node implements ExpressionNode {
   right: ExpressionNode;
   constructor(right: ExpressionNode) {

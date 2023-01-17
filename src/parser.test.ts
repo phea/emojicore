@@ -149,3 +149,31 @@ describe('test order of operations', () => {
     expect(stmt.toString()).toEqual(expected);
   });
 });
+
+describe('parser should handle booleans', () => {
+  test('test true boolean', () => {
+    const input = 'true';
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    expect(program.statements.length).toEqual(1);
+    expect(program.statements[0]).toBeInstanceOf(ast.ExpressionStatement);
+    const token = new Token(tok.TRUE, 'true');
+    const stmt = Object.assign(new ast.ExpressionStatement(token), program.statements[0]);
+    expect(stmt.token.literal).toBe('true');
+  });
+
+  test('test false boolean', () => {
+    const input = 'false';
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    expect(program.statements.length).toEqual(1);
+    expect(program.statements[0]).toBeInstanceOf(ast.ExpressionStatement);
+    const token = new Token(tok.FALSE, 'false');
+    const stmt = Object.assign(new ast.ExpressionStatement(token), program.statements[0]);
+    expect(stmt.token.literal).toBe('false');
+  });
+});
