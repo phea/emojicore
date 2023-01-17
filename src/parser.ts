@@ -49,6 +49,7 @@ export class Parser {
     this.registerPrefix(tok.BANG, this.parseBangExpression);
     this.registerPrefix(tok.TRUE, this.parseBoolean);
     this.registerPrefix(tok.FALSE, this.parseBoolean);
+    this.registerPrefix(tok.LPAREN, this.parseGroupedExpression);
 
     // Register infix parse tokens
     this.registerInfix(tok.PLUS);
@@ -143,6 +144,16 @@ export class Parser {
 
   parseBoolean() {
     return new ast.Boolean(this.curTokenIs(tok.TRUE));
+  }
+
+  parseGroupedExpression() {
+    this.nextToken();
+    const exp = this.parseExpression(Precendence.LOWEST);
+    if (!this.expectPeek(tok.RPAREN)) {
+      return null;
+    }
+
+    return exp;
   }
 
   parseExpression(precedence: Precendence) {

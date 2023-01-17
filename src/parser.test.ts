@@ -141,6 +141,10 @@ describe('test order of operations', () => {
     ['false', 'false'],
     ['3 > 5 == false', '((3 > 5) == false)'],
     ['3 < 5 == true', '((3 < 5) == true)'],
+    ['1 + (2 +3) + 4', '((1 + (2 + 3)) + 4)'],
+    ['(5 + 5) * 2', '((5 + 5) * 2)'],
+    ['2 / (5 + 5)', '(2 / (5 + 5))'],
+    // ['!(true == true)', '(!(true == true))'],
   ];
 
   test.each(tests)('%#: order of operations precendence testing: "%s"', (input, expected) => {
