@@ -217,3 +217,39 @@ describe('parser should handle if statements', () => {
     expect(expr.alternative.toString()).toBe('y');
   });
 });
+
+describe('parser should properly parse parameters', () => {
+  let tests = [
+    ['func() {};', ''],
+    ['func(x) {};', 'x'],
+    ['func(x, y, z) {};', 'x,y,z'],
+  ];
+
+  test.each(tests)('%#: expected proper params parsing', (input, expectedParams) => {
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    let stmt = program.statements[0] as ast.ExpressionStatement;
+    let fn = stmt.expression as ast.FunctionLiteral;
+    expect(fn.params.toString()).toEqual(expectedParams);
+  });
+});
+
+describe('parser should handle function literals', () => {
+  test('test basic function literal', () => {
+    const input = 'func(x, y) { x + y; }';
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    expect(program.statements.length).toEqual(1);
+    let stmt = program.statements[0] as ast.ExpressionStatement;
+    let fn = stmt.expression as ast.FunctionLiteral;
+    expect(fn.params.length).toEqual(2);
+    expect(fn.params[0].toString()).toBe('x');
+    expect(fn.params[1].toString()).toBe('y');
+
+    expect(fn.body.toString()).toBe('(x + y)');
+  });
+});

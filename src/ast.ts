@@ -221,6 +221,32 @@ export class BlockStatement extends Node implements StatementNode {
     return buf;
   }
 }
+
+export class FunctionLiteral extends Node implements ExpressionNode {
+  params: Identifier[];
+  body: BlockStatement;
+  constructor(literal: string) {
+    super(new Token(tok.FUNCTION, literal));
+  }
+
+  expressionNode(): void {
+    //
+  }
+
+  tokenLiteral(): string {
+    return this.token.literal;
+  }
+
+  toString() {
+    let buf = '';
+    let p: string[];
+    this.params.forEach((param) => {
+      p.push(param.toString());
+    });
+    buf += `${this.tokenLiteral()}(${p.join(', ')}) ${this.body.toString()}\n`;
+    return buf;
+  }
+}
 export class ExpressionStatement extends Node implements StatementNode {
   expression: ExpressionNode;
   constructor(token: Token) {
