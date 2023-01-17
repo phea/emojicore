@@ -109,9 +109,9 @@ export class Boolean extends Node implements ExpressionNode {
   value: boolean;
   constructor(val: boolean) {
     if (val) {
-      super(new Token(tok.TRUE));
+      super(new Token(tok.TRUE, 'true'));
     } else {
-      super(new Token(tok.FALSE));
+      super(new Token(tok.FALSE, 'false'));
     }
     this.value = val;
   }

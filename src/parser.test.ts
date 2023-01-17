@@ -137,6 +137,10 @@ describe('test order of operations', () => {
     ['5 > 4 == 3 < 4', '((5 > 4) == (3 < 4))'],
     ['5 < 4 != 3 > 4', '((5 < 4) != (3 > 4))'],
     ['3 + 4 * 5 == 3 * 1 + 4 * 5', '((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))'],
+    ['true', 'true'],
+    ['false', 'false'],
+    ['3 > 5 == false', '((3 > 5) == false)'],
+    ['3 < 5 == true', '((3 < 5) == true)'],
   ];
 
   test.each(tests)('%#: order of operations precendence testing: "%s"', (input, expected) => {
