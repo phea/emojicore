@@ -194,6 +194,12 @@ describe('parser should handle if statements', () => {
     const program = p.parseProgram();
 
     expect(program.statements.length).toEqual(1);
+    expect(program.statements[0]).toBeInstanceOf(ast.ExpressionStatement);
+    let stmt = program.statements[0] as ast.ExpressionStatement;
+    let expr = stmt.expression as ast.IfExpression;
+    expect(expr.condition.toString()).toBe('(x < y)');
+    expect(expr.consequence.toString()).toBe('x');
+    expect(expr.alternative).toBeUndefined();
   });
 
   test('basic if-else', () => {
@@ -203,5 +209,11 @@ describe('parser should handle if statements', () => {
     const program = p.parseProgram();
 
     expect(program.statements.length).toEqual(1);
+    expect(program.statements[0]).toBeInstanceOf(ast.ExpressionStatement);
+    let stmt = program.statements[0] as ast.ExpressionStatement;
+    let expr = stmt.expression as ast.IfExpression;
+    expect(expr.condition.toString()).toBe('(x < y)');
+    expect(expr.consequence.toString()).toBe('x');
+    expect(expr.alternative.toString()).toBe('y');
   });
 });
