@@ -118,7 +118,7 @@ export class Parser {
       return null;
     }
 
-    // wait to handle expression.
+    stmt.value = this.parseExpression(Precendence.LOWEST);
     while (!this.curTokenIs(tok.SEMICOLON)) {
       this.nextToken();
     }
@@ -129,7 +129,7 @@ export class Parser {
     const stmt = new ast.ReturnStatement();
     this.nextToken();
 
-    // wait to handle expression.
+    stmt.returnValue = this.parseExpression(Precendence.LOWEST);
     while (!this.curTokenIs(tok.SEMICOLON)) {
       this.nextToken();
     }

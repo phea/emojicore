@@ -31,7 +31,7 @@ class Node implements INode {
 
 export class LetStatement extends Node implements StatementNode {
   name: Identifier;
-  value: Node;
+  value: ExpressionNode;
 
   constructor() {
     super(new Token(tok.LET));
