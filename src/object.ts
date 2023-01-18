@@ -6,16 +6,18 @@ export interface Object {
 export const INTEGER_OBJ: ObjectType = 'INTEGER';
 export const ENTEGER_OBJ: ObjectType = 'ENTEGER';
 export const BOOLEAN_OBJ: ObjectType = 'BOOLEAN';
+export const NULL_OBJ: ObjectType = 'NULL';
 
 export class Integer implements Object {
   value: number[];
   constructor(literal: string) {
     this.value = [];
     literal.split('').forEach((n) => this.value.push(Number(n)));
+    this.value = this.value.reverse();
   }
 
   inspect(): string {
-    return this.value.join('').toString();
+    return this.value.reverse().join('').toString();
   }
 
   type(): string {
@@ -28,12 +30,13 @@ export class Enteger implements Object {
   constructor(literal: string) {
     this.value = [];
     literal.split('').forEach((n) => this.value.push(Number(n)));
+    this.value = this.value.reverse();
   }
 
   inspect(): string {
-    var buf = '';
-    this.value.forEach((n) => (buf += `${n}\uFE0F\u20E3`));
-    return buf;
+    var ents: string[] = [];
+    this.value.forEach((n) => ents.push(`${n}\uFE0F\u20E3`));
+    return ents.reverse().join('').toString();
   }
 
   type(): string {
@@ -53,5 +56,14 @@ export class Boolean implements Object {
 
   type(): string {
     return BOOLEAN_OBJ;
+  }
+}
+
+export class Null implements Object {
+  inspect(): string {
+    return 'null';
+  }
+  type(): string {
+    return NULL_OBJ;
   }
 }
