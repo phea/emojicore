@@ -118,6 +118,7 @@ export class Parser {
       return null;
     }
 
+    this.nextToken();
     stmt.value = this.parseExpression(Precendence.LOWEST);
     while (!this.curTokenIs(tok.SEMICOLON)) {
       this.nextToken();

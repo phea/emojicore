@@ -2,6 +2,7 @@ import readline = require('readline/promises');
 import sprintf = require('sprintf-js');
 import Token = require('../token');
 import pkg = require('../lexer');
+import { Parser } from '../parser';
 const { Lexer } = pkg;
 
 const printf = function (...args: any[]): number {
@@ -28,11 +29,11 @@ rl.on('line', (line) => {
     printf('%s', HELP);
   } else {
     let lex = new Lexer(line);
-    let tok = lex.nextToken();
-    while (tok.type != Token.EOF) {
-      printf('%s', tok);
-      tok = lex.nextToken();
-    }
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    // TODO: handle errors;
+    printf('%s\n', program.toString());
   }
   // console.log(line);
   process.stdout.write(PROMPT);
