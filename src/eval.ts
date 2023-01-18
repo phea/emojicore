@@ -33,6 +33,12 @@ export const Eval = (node: ast.INode): any => {
   } else if (typ === 'InfixExpression') {
     let n2 = node as ast.InfixExpression;
     return evalInfixExpression(n2.tokenLiteral(), Eval(n2.left), Eval(n2.right));
+  } else if (typ === 'IfExpression') {
+    let n2 = node as ast.IfExpression;
+    return evalIfExpression(n2);
+  } else if (typ === 'BlockStatement') {
+    let n2 = node as ast.BlockStatement;
+    return evalStatements(n2.statements);
   }
 };
 
@@ -85,6 +91,17 @@ const evalInfixExpression = (op: string, left: obj.Object, right: obj.Object): o
     return nativeBoolToBoolObject(left.inspect() === right.inspect());
   } else if (op === '!=') {
     return nativeBoolToBoolObject(left.inspect() !== right.inspect());
+  } else {
+    return NULL;
+  }
+};
+
+const evalIfExpression = (expr: ast.IfExpression) => {
+  let condition = Eval(expr.condition) as obj.Boolean;
+  if (condition.value) {
+    return Eval(expr.consequence);
+  } else if (expr.alternative !== undefined) {
+    return Eval(expr.alternative);
   } else {
     return NULL;
   }

@@ -113,3 +113,22 @@ describe('should evaluate boolean expression', () => {
     expect(res.value).toBe(expected);
   });
 });
+describe('should evaluate if-else expression', () => {
+  const tests = [
+    ['if (true) { 10 }', '10'],
+    ['if (false) { 10 }', 'null'],
+    ['if (1 < 2) { 10 }', '10'],
+    ['if (1 > 2) { 10 }', 'null'],
+    ['if (1 > 2) { 10 } else { 20 }', '20'],
+    ['if (1 < 2) { 10 } else { 20 }', '10'],
+  ];
+
+  test.each(tests)('%#: if-else expression eval test:', (input, expected) => {
+    const lex = new Lexer(String(input));
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    let res = Eval(program) as obj.Object;
+    expect(res.inspect()).toBe(expected);
+  });
+});
