@@ -12,6 +12,9 @@ export const Eval = (node: ast.INode): any => {
   } else if (typ === 'IntegerLiteral') {
     let n2 = node as ast.IntegerLiteral;
     return new obj.Integer(n2.tokenLiteral());
+  } else if (typ === 'Boolean') {
+    let n2 = node as ast.Boolean;
+    return new obj.Boolean(n2.value);
   }
 };
 

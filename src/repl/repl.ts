@@ -3,6 +3,7 @@ import sprintf = require('sprintf-js');
 import Token = require('../token');
 import pkg = require('../lexer');
 import { Parser } from '../parser';
+import { Eval } from '../eval';
 const { Lexer } = pkg;
 
 const printf = function (...args: any[]): number {
@@ -33,7 +34,10 @@ rl.on('line', (line) => {
     const program = p.parseProgram();
 
     // TODO: handle errors;
-    printf('%s\n', program.toString());
+    let res = Eval(program);
+    if (res !== undefined) {
+      printf('%s\n', res.inspect());
+    }
   }
   // console.log(line);
   process.stdout.write(PROMPT);
