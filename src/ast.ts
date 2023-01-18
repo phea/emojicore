@@ -247,6 +247,34 @@ export class FunctionLiteral extends Node implements ExpressionNode {
     return buf;
   }
 }
+
+export class CallExpression extends Node implements ExpressionNode {
+  func: ExpressionNode;
+  args: ExpressionNode[];
+  constructor(func: ExpressionNode) {
+    super(new Token(tok.LPAREN, func.tokenLiteral()));
+    this.func = func;
+    this.args = [];
+  }
+
+  expressionNode(): void {
+    //
+  }
+
+  tokenLiteral(): string {
+    return this.token.literal;
+  }
+
+  toString() {
+    let a: string[] = [];
+    this.args.forEach((arg) => {
+      a.push(arg.toString());
+    });
+
+    return `${this.func.toString()}(${a.join(', ')})`;
+  }
+}
+
 export class ExpressionStatement extends Node implements StatementNode {
   expression: ExpressionNode;
   constructor(token: Token) {

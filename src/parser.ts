@@ -25,6 +25,7 @@ const precendences: { [key: TokenType]: Precendence } = {
   [tok.MINUS]: Precendence.SUM,
   [tok.SLASH]: Precendence.PRODUCT,
   [tok.ASTERISK]: Precendence.PRODUCT,
+  [tok.LPAREN]: Precendence.CALL,
 };
 
 export class Parser {
@@ -54,14 +55,15 @@ export class Parser {
     this.registerPrefix(tok.FUNCTION, this.parseFunctionLiteral);
 
     // Register infix parse tokens
-    this.registerInfix(tok.PLUS);
-    this.registerInfix(tok.MINUS);
-    this.registerInfix(tok.SLASH);
-    this.registerInfix(tok.ASTERISK);
-    this.registerInfix(tok.EQL);
-    this.registerInfix(tok.NOT_EQL);
-    this.registerInfix(tok.LT);
-    this.registerInfix(tok.GT);
+    this.registerInfix(tok.PLUS, this.parseInfixExpression);
+    this.registerInfix(tok.MINUS, this.parseInfixExpression);
+    this.registerInfix(tok.SLASH, this.parseInfixExpression);
+    this.registerInfix(tok.ASTERISK, this.parseInfixExpression);
+    this.registerInfix(tok.EQL, this.parseInfixExpression);
+    this.registerInfix(tok.NOT_EQL, this.parseInfixExpression);
+    this.registerInfix(tok.LT, this.parseInfixExpression);
+    this.registerInfix(tok.GT, this.parseInfixExpression);
+    this.registerInfix(tok.LPAREN, this.parseCallExpression);
 
     this.nextToken();
     this.nextToken();
@@ -238,6 +240,33 @@ export class Parser {
     return idents;
   }
 
+  parseCallExpression(func: ast.ExpressionNode) {
+    let exp = new ast.CallExpression(func);
+    exp.args = this.parseCallArguments();
+    return exp;
+  }
+
+  parseCallArguments() {
+    let args: ast.ExpressionNode[] = [];
+    if (this.peekTokenIs(tok.RPAREN)) {
+      this.nextToken();
+      return args;
+    }
+
+    this.nextToken();
+    args.push(this.parseExpression(Precendence.LOWEST));
+    while (this.peekTokenIs(tok.COMMA)) {
+      this.nextToken();
+      this.nextToken();
+      args.push(this.parseExpression(Precendence.LOWEST));
+    }
+
+    if (!this.expectPeek(tok.RPAREN)) {
+      return null;
+    }
+    return args;
+  }
+
   parseExpression(precedence: Precendence) {
     const prefix = this.prefixParseFns[this.curToken.type];
     if (prefix === undefined) {
@@ -271,16 +300,16 @@ export class Parser {
     this.prefixParseFns[tokenType] = fn.bind(this);
   }
 
-  registerInfix(tokenType: TokenType) {
-    const fn = (left: ast.ExpressionNode) => {
-      let expr = new ast.InfixExpression(left, tokenType);
+  parseInfixExpression(left: ast.ExpressionNode) {
+    let expr = new ast.InfixExpression(left, this.curToken.literal);
 
-      let prec = this.curPrecedence();
-      this.nextToken();
-      expr.right = this.parseExpression(prec);
-      return expr;
-    };
+    let prec = this.curPrecedence();
+    this.nextToken();
+    expr.right = this.parseExpression(prec);
+    return expr;
+  }
 
+  registerInfix(tokenType: TokenType, fn: InfixParseFn) {
     this.infixParseFns[tokenType] = fn.bind(this);
   }
 

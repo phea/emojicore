@@ -144,6 +144,9 @@ describe('test order of operations', () => {
     ['1 + (2 +3) + 4', '((1 + (2 + 3)) + 4)'],
     ['(5 + 5) * 2', '((5 + 5) * 2)'],
     ['2 / (5 + 5)', '(2 / (5 + 5))'],
+    ['a + add(b * c) + d', '((a + add((b * c))) + d)'],
+    ['add(a, b, 1, 2 * 3, 4 + 5, add(6, 7 * 8))', 'add(a, b, 1, (2 * 3), (4 + 5), add(6, (7 * 8)))'],
+    ['add(a + b + c * d / f + g)', 'add((((a + b) + ((c * d) / f)) + g))'],
     // ['!(true == true)', '(!(true == true))'],
   ];
 
@@ -251,5 +254,20 @@ describe('parser should handle function literals', () => {
     expect(fn.params[1].toString()).toBe('y');
 
     expect(fn.body.toString()).toBe('(x + y)');
+  });
+});
+
+describe('parser should handle call expressions', () => {
+  test('test basic function literal', () => {
+    const input = 'add(1, 2 * 3, 4 + 5);';
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    expect(program.statements.length).toEqual(1);
+    let stmt = program.statements[0] as ast.ExpressionStatement;
+    let exp = stmt.expression as ast.CallExpression;
+    expect(exp.tokenLiteral()).toBe('add');
+    expect(exp.args.length).toEqual(3);
   });
 });
