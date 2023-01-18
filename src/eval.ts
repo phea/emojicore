@@ -2,6 +2,15 @@ import * as ast from './ast';
 import * as obj from './object';
 
 const NULL = new obj.Null();
+const TRUE = new obj.Boolean(true);
+const FALSE = new obj.Boolean(false);
+
+const nativeBoolToBoolObject = (input: boolean) => {
+  if (input) {
+    return TRUE;
+  }
+  return FALSE;
+};
 
 export const Eval = (node: ast.INode): any => {
   let typ = node.constructor.name;
@@ -35,9 +44,9 @@ const evalStatements = (stmts: ast.StatementNode[]) => {
 
 const evalBangOperatorExpression = (right: obj.Object) => {
   if (right.type() === obj.BOOLEAN_OBJ && right.inspect() === 'false') {
-    return new obj.Boolean(true);
+    return TRUE;
   } else {
-    return new obj.Boolean(false);
+    return FALSE;
   }
 };
 
@@ -55,6 +64,14 @@ const evalIntegerInfix = (op: string, left: obj.Integer, right: obj.Integer): ob
   } else if (op === '/') {
     let res = divideArrays(lVal, rVal);
     return new obj.Integer(res.join(''));
+  } else if (op === '<') {
+    return nativeBoolToBoolObject(!isLarger(lVal, rVal) && !isEqual(lVal, rVal));
+  } else if (op === '>') {
+    return nativeBoolToBoolObject(isLarger(lVal, rVal));
+  } else if (op === '==') {
+    return nativeBoolToBoolObject(isEqual(lVal, rVal));
+  } else if (op === '!=') {
+    return nativeBoolToBoolObject(!isEqual(lVal, rVal));
   } else {
     return NULL;
   }
@@ -64,6 +81,10 @@ const evalInfixExpression = (op: string, left: obj.Object, right: obj.Object): o
   const [lTyp, rTyp] = [left.type(), right.type()];
   if (lTyp === obj.INTEGER_OBJ && rTyp === obj.INTEGER_OBJ) {
     return evalIntegerInfix(op, left as obj.Integer, right as obj.Integer);
+  } else if (op === '==') {
+    return nativeBoolToBoolObject(left.inspect() === right.inspect());
+  } else if (op === '!=') {
+    return nativeBoolToBoolObject(left.inspect() !== right.inspect());
   } else {
     return NULL;
   }
@@ -118,6 +139,18 @@ const isLarger = (arr1: number[], arr2: number[]) => {
     }
     return false;
   }
+};
+
+const isEqual = (arr1: number[], arr2: number[]) => {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
 };
 
 function subtractArrays(arr1: number[], arr2: number[]) {
@@ -183,7 +216,7 @@ function divideArrays(dividend: number[], divisor: number[]) {
   for (var i = 0; i < dividend.length; i++) {
     temp.push(dividend[i]);
     quotientDigit = 0;
-    while (isLarger(temp, divisor) || temp.length === divisor.length) {
+    while (isLarger(temp, divisor) || isEqual(temp, divisor)) {
       temp = subtractArrays(temp, divisor);
       quotientDigit++;
     }
