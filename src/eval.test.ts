@@ -35,3 +35,22 @@ describe('should evaluate boolean', () => {
     expect(res.value).toBe(expected);
   });
 });
+
+describe('should evaluate bang operator', () => {
+  const tests = [
+    ['!true', false],
+    ['!false', true],
+    ['!!true', true],
+    ['!!false', false],
+  ];
+
+  test.each(tests)('%#: bang eval test:', (input, expected) => {
+    const lex = new Lexer(String(input));
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    let res = Eval(program) as obj.Boolean;
+    console.log('what is res:', res);
+    expect(res.value).toBe(expected);
+  });
+});
