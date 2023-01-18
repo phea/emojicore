@@ -1,0 +1,284 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap");
+.arena {
+  text-align: center;
+  display: flex;
+  min-height: calc(100vh - 135px);
+}
+
+body {
+  background: #0f1117;
+  font-family: "IBM Plex Mono", monospace;
+  color: white;
+}
+
+.code-area {
+  height: 70vh;
+  margin: auto;
+  text-align: left;
+  background: #13181c;
+  color: white;
+  font-size: 1.15rem;
+  line-height: 1.5rem;
+}
+
+.editor-container {
+  width: 100%;
+  position: relative;
+}
+
+.btn-reset-code {
+  position: absolute;
+  bottom: 10px;
+  right: 140px;
+  padding: 10px;
+  background: #27313a;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-reset-code:hover {
+  background: #171d23;
+}
+
+.btn-submit-code {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 10px;
+  background: #0060ca;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-submit-code:hover {
+  background: #024a99;
+}
+
+.btn-submit-code:disabled {
+  background: #024a99;
+  color: gray;
+}
+textarea {
+  border: none;
+  padding: 5px;
+  resize: none;
+  width: calc(100% - 10px);
+  min-width: 300px;
+  height: calc(100% - 5px);
+  margin: auto;
+  text-align: left;
+  background: #13181c;
+  color: white;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  padding-bottom: 0;
+}
+textarea::-webkit-scrollbar {
+  width: 12px;
+  background-color: #171d23;
+  cursor: pointer;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  background-color: #27313a;
+}
+
+textarea:focus {
+  outline: none;
+}
+
+
+.nav-container {
+  border: 1px solid var(--light-gray);
+  border-radius: 0.25rem;
+  width: 100%;
+  background: #0f1117;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.nav-container .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.fight-selector {
+  padding: 7px 20px;
+  background: #13181c;
+  color: white;
+  outline: 1px solid white;
+  font-size: 1rem;
+  margin-left: 20px;
+  font-weight: bold;
+  border: none;
+}
+
+.fight-selector option {
+  padding: 5px;
+  border: none;
+}
+
+.nav-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+.nav-bar li {
+  list-style: none;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  color: var(--white);
+}
+
+.nav-bar li:hover {
+  background: var(--light-gray);
+  color: black;
+}
+
+.section-header {
+  display: flex;
+  color: white;
+  background: #27313a;
+  padding: 10px 15px;
+  margin-top: 10px;
+}
+
+.editor-header {
+  width: 100%;
+  min-width: 290px;
+  border-right: 1px solid gray;
+}
+
+.spec-header {
+  min-width: 400px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.spec-container {
+  padding: 20px;
+  background: #171d23;
+  border-right: 1px solid gray;
+}
+
+.spec-wrapper {
+  position: relative;
+  width: 600px;
+  height: 440px;
+  background: transparent;
+  z-index: 20;
+}
+
+.iframe-output {
+  border: none;
+  background: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.overlay {
+  border: none;
+  width: 400px;
+  height: 300px;
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  overflow: hidden;
+}
+
+.img-overLay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  height: 300px;
+}
+
+.target-container {
+  padding: 20px;
+  background: #171d23;
+}
+
+.footer {
+  padding: 5px;
+  color: #ffdf00;
+  text-align: center;
+  width: 99%;
+  background: #0f1117;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer a {
+  color: #ffdf00;
+  margin-left: 10px;
+}
+
+.hr-divider {
+  margin: 20px 0;
+  border: none;
+  border-bottom: 1px solid gray;
+}
+
+.output-container {
+  width: 540px;
+  margin: 0 50px;
+  background: #0f1117;
+  margin: auto;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  padding-left: 20px;
+}
+
+.output-container h5 {
+  font-size: 0.9rem;
+  margin: 5px 0;
+}
+
+.color-container {
+  width: 300px;
+  background: #0f1117;
+  margin: auto;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px;
+  flex-wrap: wrap;
+}
+.color-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+}
+.color-badge {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  border-radius: 50%;
+  margin: 0 10px;
+}
