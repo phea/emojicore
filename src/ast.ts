@@ -1,7 +1,7 @@
 import * as tok from './token';
 import { Token } from './token';
 
-interface INode {
+export interface INode {
   tokenLiteral(): string;
   toString(): string;
 }
@@ -14,7 +14,7 @@ export interface ExpressionNode extends INode {
   expressionNode(): void;
 }
 
-class Node implements INode {
+export class Node implements INode {
   token: Token;
   constructor(token: Token) {
     this.token = token;
@@ -297,13 +297,13 @@ export class ExpressionStatement extends Node implements StatementNode {
   }
 }
 
-export class Program {
+export class Program implements INode {
   statements: StatementNode[];
   constructor() {
     this.statements = [];
   }
 
-  toString() {
+  tokenLiteral(): string {
     let buf = '';
     this.statements.forEach((stmt) => {
       buf += stmt.toString();
@@ -313,5 +313,9 @@ export class Program {
       buf += ';';
     }
     return buf;
+  }
+
+  toString() {
+    return this.tokenLiteral();
   }
 }
