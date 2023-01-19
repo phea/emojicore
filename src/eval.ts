@@ -370,6 +370,32 @@ const printFn: obj.BuiltinFunction = (...args: obj.Object[]): obj.Object => {
   return NULL;
 };
 
+const castInt: obj.BuiltinFunction = (...args: obj.Object[]): obj.Object => {
+  if (args.length === 0) {
+    return NULL;
+  } else if (args[0].type() === obj.INTEGER_OBJ) {
+    return args[0];
+  } else if (args[0].type() === obj.ENTEGER_OBJ) {
+    return new obj.Integer(args[0].inspect());
+  } else {
+    return NULL;
+  }
+};
+
+const castEnt: obj.BuiltinFunction = (...args: obj.Object[]): obj.Object => {
+  if (args.length === 0) {
+    return NULL;
+  } else if (args[0].type() === obj.ENTEGER_OBJ) {
+    return args[0];
+  } else if (args[0].type() === obj.INTEGER_OBJ) {
+    return new obj.Enteger(args[0].inspect());
+  } else {
+    return NULL;
+  }
+};
+
 const builtins: { [k: string]: obj.Builtin } = {
   print: new obj.Builtin(printFn),
+  int: new obj.Builtin(castInt),
+  ent: new obj.Builtin(castEnt),
 };
