@@ -6,6 +6,7 @@ export interface Object {
 export const INTEGER_OBJ: ObjectType = 'INTEGER';
 export const ENTEGER_OBJ: ObjectType = 'ENTEGER';
 export const BOOLEAN_OBJ: ObjectType = 'BOOLEAN';
+export const RETURN_VALUE_OBJ: ObjectType = 'RETURN_VALUE';
 export const NULL_OBJ: ObjectType = 'NULL';
 
 export class Integer implements Object {
@@ -56,6 +57,21 @@ export class Boolean implements Object {
 
   type(): string {
     return BOOLEAN_OBJ;
+  }
+}
+
+export class ReturnValue implements Object {
+  value: Object;
+  constructor(value: Object) {
+    this.value = value;
+  }
+
+  type(): string {
+    return RETURN_VALUE_OBJ;
+  }
+
+  inspect(): string {
+    return this.value.inspect();
   }
 }
 

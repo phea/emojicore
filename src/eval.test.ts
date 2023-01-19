@@ -133,3 +133,39 @@ describe('should evaluate if-else expression', () => {
     expect(res.inspect()).toBe(expected);
   });
 });
+
+describe('should evaluate return statement', () => {
+  const tests = [
+    ['return 10;', '10'],
+    ['return 10; 9;', '10'],
+    ['return 2 * 5; 9;', '10'],
+    ['9; return 2 * 5; 9;', '10'],
+  ];
+
+  test.each(tests)('%#: return value eval test:', (input, expected) => {
+    const lex = new Lexer(String(input));
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    let res = Eval(program) as obj.Object;
+    expect(res.inspect()).toBe(expected);
+  });
+
+  test('should evaluate nested return statements', () => {
+    const input = `
+    if (10 > 1) {
+      if (10 > 1) {
+        return 10;
+      }
+      return 1;
+    }
+    `;
+
+    const lex = new Lexer(String(input));
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    let res = Eval(program) as obj.Object;
+    expect(res.inspect()).toBe('10');
+  });
+});

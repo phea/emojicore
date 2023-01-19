@@ -17,7 +17,7 @@ export const Eval = (node: ast.INode): any => {
   // console.log(typ);
   if (typ === 'Program') {
     let n2 = node as ast.Program;
-    return evalStatements(n2.statements);
+    return evalProgram(n2.statements);
   } else if (typ === 'ExpressionStatement') {
     let n2 = node as ast.ExpressionStatement;
     return Eval(n2.expression);
@@ -38,13 +38,33 @@ export const Eval = (node: ast.INode): any => {
     return evalIfExpression(n2);
   } else if (typ === 'BlockStatement') {
     let n2 = node as ast.BlockStatement;
-    return evalStatements(n2.statements);
+    return evalBlockStatement(n2.statements);
+  } else if (typ === 'ReturnStatement') {
+    let n2 = node as ast.ReturnStatement;
+    return new obj.ReturnValue(Eval(n2.returnValue));
   }
 };
 
-const evalStatements = (stmts: ast.StatementNode[]) => {
+const evalProgram = (stmts: ast.StatementNode[]) => {
   let res: obj.Object;
-  stmts.forEach((stmt) => (res = Eval(stmt)));
+  for (let i = 0; i < stmts.length; i++) {
+    res = Eval(stmts[i]);
+    if (res.type() === obj.RETURN_VALUE_OBJ) {
+      let r2 = res as obj.ReturnValue;
+      return r2.value;
+    }
+  }
+  return res;
+};
+
+const evalBlockStatement = (stmts: ast.StatementNode[]) => {
+  let res: obj.Object;
+  for (let i = 0; i < stmts.length; i++) {
+    res = Eval(stmts[i]);
+    if (res !== undefined && res.type() === obj.RETURN_VALUE_OBJ) {
+      return res;
+    }
+  }
   return res;
 };
 
