@@ -1,3 +1,7 @@
+import { inspect } from 'util';
+import * as ast from './ast';
+import { Environment } from './env';
+
 export interface Object {
   type(): ObjectType;
   inspect(): string;
@@ -7,6 +11,7 @@ export const INTEGER_OBJ: ObjectType = 'INTEGER';
 export const ENTEGER_OBJ: ObjectType = 'ENTEGER';
 export const BOOLEAN_OBJ: ObjectType = 'BOOLEAN';
 export const RETURN_VALUE_OBJ: ObjectType = 'RETURN_VALUE';
+export const FUNCTION_OBJ: ObjectType = 'FUNCTION';
 export const NULL_OBJ: ObjectType = 'NULL';
 
 export class Integer implements Object {
@@ -72,6 +77,25 @@ export class ReturnValue implements Object {
 
   inspect(): string {
     return this.value.inspect();
+  }
+}
+
+export class Function implements Object {
+  params: ast.Identifier[];
+  body: ast.BlockStatement;
+  env: Environment;
+
+  type(): string {
+    return FUNCTION_OBJ;
+  }
+
+  inspect(): string {
+    var buf = 'func(';
+    buf += this.params.join(', ');
+    buf += ') {\n';
+    buf += this.body.toString;
+    buf += '\n}';
+    return buf;
   }
 }
 

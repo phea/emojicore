@@ -2,12 +2,19 @@ import * as obj from './object';
 
 export class Environment {
   store: { [k: string]: obj.Object };
-  constructor() {
+  outer: Environment;
+
+  constructor(outer?: Environment) {
     this.store = {};
+    this.outer = outer;
   }
 
   get(name: string): obj.Object {
-    return this.store[name];
+    let val = this.store[name];
+    if (val === undefined && this.outer !== undefined) {
+      val = this.outer.get(name);
+    }
+    return val;
   }
 
   set(name: string, val: obj.Object) {

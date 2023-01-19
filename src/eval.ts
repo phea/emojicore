@@ -50,6 +50,21 @@ export const Eval = (node: ast.INode, env: Environment): any => {
   } else if (typ === 'Identifier') {
     let n2 = node as ast.Identifier;
     return evalIdentifier(n2, env);
+  } else if (typ === 'FunctionLiteral') {
+    let n2 = node as ast.FunctionLiteral;
+    let params = n2.params;
+    let body = n2.body;
+    let o = new obj.Function();
+    o.body = body;
+    o.params = params;
+    o.env = env;
+    return o;
+  } else if (typ === 'CallExpression') {
+    let n2 = node as ast.CallExpression;
+    let fn = Eval(n2.func, env);
+
+    let args = evalExpressions(n2.args, env);
+    return applyFunction(fn, args);
   }
 };
 
@@ -61,6 +76,38 @@ const evalProgram = (stmts: ast.StatementNode[], env: Environment) => {
       let r2 = res as obj.ReturnValue;
       return r2.value;
     }
+  }
+  return res;
+};
+
+const applyFunction = (fn: obj.Object, args: obj.Object[]) => {
+  let f2 = fn as obj.Function;
+
+  let extendedEnv = extendedFunctionEnv(f2, args);
+  let res = Eval(f2.body, extendedEnv);
+  return unwrapReturnValue(res);
+};
+
+const extendedFunctionEnv = (fn: obj.Function, args: obj.Object[]) => {
+  let env = new Environment(fn.env);
+  for (let i = 0; i < fn.params.length; i++) {
+    env.set(fn.params[i].value, args[i]);
+  }
+  return env;
+};
+
+const unwrapReturnValue = (o: obj.Object) => {
+  if (o.type() === obj.RETURN_VALUE_OBJ) {
+    let o2 = o as obj.ReturnValue;
+    return o2.value;
+  }
+  return o;
+};
+
+const evalExpressions = (exps: ast.ExpressionNode[], env: Environment) => {
+  let res: obj.Object[] = [];
+  for (let i = 0; i < exps.length; i++) {
+    res.push(Eval(exps[i], env));
   }
   return res;
 };

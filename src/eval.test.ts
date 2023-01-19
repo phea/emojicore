@@ -188,3 +188,35 @@ describe('should evaluate let statements', () => {
     expect(res.inspect()).toBe(expected);
   });
 });
+
+describe('test function evaluation', () => {
+  test('should parse basic function', () => {
+    let input = 'func(x) { x + 2; };';
+    const lex = new Lexer(String(input));
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    let res = Eval(program, new Environment()) as obj.Function;
+    expect(res.params.length).toBe(1);
+    expect(res.params[0].toString()).toEqual('x');
+    expect(res.body.toString()).toEqual('(x + 2)');
+  });
+
+  let tests = [
+    ['let identity = func(x) { x; }; identity(5);', '5'],
+    ['let identity = func(x) { return x; }; identity(5);', '5'],
+    ['let add = func(x, y) { x + y; }; add(5, 5);', '10'],
+    ['let double = func(x) { x * 2; }; double(5);', '10'],
+    ['let add = func(x, y) { x + y; }; add(5 + 5, add(5, 5));', '20'],
+    ['func(x) { x; }(5)', '5'],
+  ];
+
+  test.each(tests)('%#: function eval test:', (input, expected) => {
+    const lex = new Lexer(String(input));
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    let res = Eval(program, new Environment()) as obj.Integer;
+    expect(res.inspect()).toEqual(expected);
+  });
+});
