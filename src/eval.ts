@@ -25,6 +25,9 @@ export const Eval = (node: ast.INode, env: Environment): any => {
   } else if (typ === 'IntegerLiteral') {
     let n2 = node as ast.IntegerLiteral;
     return new obj.Integer(n2.tokenLiteral());
+  } else if (typ === 'EntegerLiteral') {
+    let n2 = node as ast.EntegerLiteral;
+    return new obj.Enteger(n2.tokenLiteral());
   } else if (typ === 'Boolean') {
     let n2 = node as ast.Boolean;
     return new obj.Boolean(n2.value);
@@ -184,10 +187,39 @@ const evalIntegerInfix = (op: string, left: obj.Integer, right: obj.Integer): ob
   }
 };
 
+const evalEntegerInfix = (op: string, left: obj.Integer, right: obj.Integer): obj.Object => {
+  const [lVal, rVal] = [left.value, right.value];
+  if (op === '+') {
+    let res = addArrays(lVal, rVal);
+    return new obj.Enteger(res.reverse().join(''));
+  } else if (op === '-') {
+    let res = subtractArrays(lVal, rVal);
+    return new obj.Enteger(res.reverse().join(''));
+  } else if (op === '*') {
+    let res = multiplyArrays(lVal.reverse(), rVal.reverse());
+    return new obj.Enteger(res.join(''));
+  } else if (op === '/') {
+    let res = divideArrays(lVal, rVal);
+    return new obj.Enteger(res.join(''));
+  } else if (op === '<') {
+    return nativeBoolToBoolObject(!isLarger(lVal, rVal) && !isEqual(lVal, rVal));
+  } else if (op === '>') {
+    return nativeBoolToBoolObject(isLarger(lVal, rVal));
+  } else if (op === '==') {
+    return nativeBoolToBoolObject(isEqual(lVal, rVal));
+  } else if (op === '!=') {
+    return nativeBoolToBoolObject(!isEqual(lVal, rVal));
+  } else {
+    return NULL;
+  }
+};
+
 const evalInfixExpression = (op: string, left: obj.Object, right: obj.Object): obj.Object => {
   const [lTyp, rTyp] = [left.type(), right.type()];
   if (lTyp === obj.INTEGER_OBJ && rTyp === obj.INTEGER_OBJ) {
     return evalIntegerInfix(op, left as obj.Integer, right as obj.Integer);
+  } else if (lTyp === obj.ENTEGER_OBJ && rTyp === obj.ENTEGER_OBJ) {
+    return evalEntegerInfix(op, left as obj.Enteger, right as obj.Enteger);
   } else if (op === '==') {
     return nativeBoolToBoolObject(left.inspect() === right.inspect());
   } else if (op === '!=') {

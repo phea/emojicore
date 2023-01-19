@@ -83,6 +83,25 @@ describe('should evaluate integer expression', () => {
   });
 });
 
+describe('should evaluate integer expression', () => {
+  const tests = [
+    ['5️⃣', '5'],
+    ['5️⃣5️⃣5️⃣', '555'],
+    ['5️⃣ + 5️⃣', '10'],
+    ['5️⃣ * 5️⃣', '25'],
+    ['5️⃣5️⃣ - 5️⃣', '50'],
+  ];
+
+  test.each(tests)('%#: integer expression eval test:', (input, expected) => {
+    const lex = new Lexer(String(input));
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    let res = Eval(program, new Environment()) as obj.Enteger;
+    expect(res.inspect()).toBe(expected);
+  });
+});
+
 describe('should evaluate boolean expression', () => {
   const tests = [
     ['true', true],
