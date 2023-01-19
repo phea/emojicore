@@ -12,6 +12,7 @@ export const ENTEGER_OBJ: ObjectType = 'ENTEGER';
 export const BOOLEAN_OBJ: ObjectType = 'BOOLEAN';
 export const RETURN_VALUE_OBJ: ObjectType = 'RETURN_VALUE';
 export const FUNCTION_OBJ: ObjectType = 'FUNCTION';
+export const ITER_OBJ: ObjectType = 'ITER';
 export const NULL_OBJ: ObjectType = 'NULL';
 
 export class Integer implements Object {
@@ -93,7 +94,26 @@ export class Function implements Object {
     var buf = 'func(';
     buf += this.params.join(', ');
     buf += ') {\n';
-    buf += this.body.toString;
+    buf += this.body.toString();
+    buf += '\n}';
+    return buf;
+  }
+}
+
+export class Iter implements Object {
+  limit: ast.IntegerLiteral;
+  body: ast.BlockStatement;
+  env: Environment;
+
+  type(): string {
+    return FUNCTION_OBJ;
+  }
+
+  inspect(): string {
+    var buf = 'iter(';
+    buf += this.limit.toString();
+    buf += ') {\n';
+    buf += this.body.toString();
     buf += '\n}';
     return buf;
   }

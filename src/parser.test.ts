@@ -274,7 +274,7 @@ describe('parser should handle call expressions', () => {
 
 describe('parser should handle iter statement', () => {
   test('test basic function literal', () => {
-    const input = 'iter(5) { x + y; let z = 1; }';
+    const input = 'iter(5) { x + y; let z = 1; };';
     const lex = new Lexer(input);
     const p = new Parser(lex);
     const program = p.parseProgram();

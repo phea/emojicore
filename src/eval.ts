@@ -65,7 +65,25 @@ export const Eval = (node: ast.INode, env: Environment): any => {
 
     let args = evalExpressions(n2.args, env);
     return applyFunction(fn, args);
+  } else if (typ === 'IterStatement') {
+    let n2 = node as ast.IterStatement;
+    let o = new obj.Iter();
+    o.limit = n2.limit as ast.IntegerLiteral;
+    o.body = n2.block;
+    o.env = env;
+
+    return evalIter(o.limit, o.body, env);
   }
+};
+
+const evalIter = (limit: ast.IntegerLiteral, block: ast.BlockStatement, env: Environment) => {
+  let intObj = new obj.Integer(limit.toString());
+  let res: obj.Object;
+  while (intObj.inspect() !== '0') {
+    res = Eval(block, env);
+    intObj.value = subtractArrays(intObj.value, [1]);
+  }
+  return res;
 };
 
 const evalProgram = (stmts: ast.StatementNode[], env: Environment) => {

@@ -220,3 +220,28 @@ describe('test function evaluation', () => {
     expect(res.inspect()).toEqual(expected);
   });
 });
+
+describe('test iter loop evaluation', () => {
+  test('should parse basic iter loop', () => {
+    let input = 'iter(5) { 5 };';
+    const lex = new Lexer(String(input));
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+    let res = Eval(program, new Environment());
+    // expect(res.params[0].toString()).toEqual('x');
+    // expect(res.body.toString()).toEqual('(x + 2)');
+  });
+
+  let tests = [
+    ['let x = 5; iter(5) { let x = x + 5; }; x;', '30'],
+    ['let x = 1; iter(8) { let x = x * 2; }; x;', '256'],
+  ];
+
+  test.each(tests)('%#: iter test test:', (input, expected) => {
+    const lex = new Lexer(String(input));
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+    let res = Eval(program, new Environment()) as obj.Integer;
+    expect(res.inspect()).toEqual(expected);
+  });
+});

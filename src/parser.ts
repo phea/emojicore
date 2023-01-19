@@ -143,6 +143,9 @@ export class Parser {
     }
 
     stmt.block = this.parseBlockStatement();
+    while (!this.curTokenIs(tok.SEMICOLON)) {
+      this.nextToken();
+    }
     return stmt;
   }
 
