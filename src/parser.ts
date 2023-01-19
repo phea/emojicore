@@ -79,6 +79,8 @@ export class Parser {
       return this.parseLetStatement();
     } else if (this.curToken.type === tok.RETURN) {
       return this.parseReturnStatement();
+    } else if (this.curToken.type === tok.ITER) {
+      return this.parseIterStatement();
     } else {
       return this.parseExpressionStatement();
     }
@@ -123,6 +125,24 @@ export class Parser {
     while (!this.curTokenIs(tok.SEMICOLON)) {
       this.nextToken();
     }
+    return stmt;
+  }
+
+  parseIterStatement() {
+    const stmt = new ast.IterStatement();
+    if (!this.expectPeek(tok.LPAREN)) {
+      return null;
+    }
+    stmt.limit = this.parseExpression(Precendence.LOWEST);
+    while (!this.curTokenIs(tok.RPAREN)) {
+      this.nextToken();
+    }
+
+    if (!this.expectPeek(tok.LBRACE)) {
+      return null;
+    }
+
+    stmt.block = this.parseBlockStatement();
     return stmt;
   }
 

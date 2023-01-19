@@ -271,3 +271,17 @@ describe('parser should handle call expressions', () => {
     expect(exp.args.length).toEqual(3);
   });
 });
+
+describe('parser should handle iter statement', () => {
+  test('test basic function literal', () => {
+    const input = 'iter(5) { x + y; let z = 1; }';
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    expect(program.statements.length).toEqual(1);
+    let stmt = program.statements[0] as ast.IterStatement;
+    expect(stmt.limit.toString()).toBe('5');
+    expect(stmt.block.toString()).toBe('(x + y)let z = 1;');
+  });
+});

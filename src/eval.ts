@@ -14,7 +14,7 @@ const nativeBoolToBoolObject = (input: boolean) => {
 
 export const Eval = (node: ast.INode): any => {
   let typ = node.constructor.name;
-  console.log(typ);
+  // console.log(typ);
   if (typ === 'Program') {
     let n2 = node as ast.Program;
     return evalStatements(n2.statements);

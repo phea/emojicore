@@ -113,6 +113,7 @@ describe('should evaluate boolean expression', () => {
     expect(res.value).toBe(expected);
   });
 });
+
 describe('should evaluate if-else expression', () => {
   const tests = [
     ['if (true) { 10 }', '10'],

@@ -48,6 +48,23 @@ export class LetStatement extends Node implements StatementNode {
   }
 }
 
+export class IterStatement extends Node implements StatementNode {
+  limit: ExpressionNode;
+  block: BlockStatement;
+  constructor() {
+    super(new Token(tok.ITER));
+    this.limit = new IntegerLiteral('0');
+  }
+
+  statementNode(): void {
+    //
+  }
+
+  toString() {
+    return `iter(${this.limit.tokenLiteral()}) { ${this.block.toString()} };`;
+  }
+}
+
 export class ReturnStatement extends Node implements StatementNode {
   returnValue: ExpressionNode;
 

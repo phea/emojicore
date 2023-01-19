@@ -42,6 +42,7 @@ export const FALSE: TokenType = 'false';
 export const IF: TokenType = 'if';
 export const ELSE: TokenType = 'else';
 export const RETURN: TokenType = 'return';
+export const ITER: TokenType = 'iter';
 
 export class Token {
   type: TokenType;
@@ -70,4 +71,5 @@ export const keywords: Keywords = {
   if: new Token(IF),
   else: new Token(ELSE),
   return: new Token(RETURN),
+  iter: new Token(ITER),
 };
