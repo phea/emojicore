@@ -42,7 +42,9 @@ export class Enteger implements Object {
   }
 
   inspect(): string {
-    return this.value.reverse().join('').toString();
+    var ents: string[] = [];
+    this.value.forEach((n) => ents.push(`${n}\uFE0F\u20E3`));
+    return ents.reverse().join('').toString();
   }
 
   type(): string {

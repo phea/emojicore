@@ -85,11 +85,11 @@ describe('should evaluate integer expression', () => {
 
 describe('should evaluate integer expression', () => {
   const tests = [
-    ['5️⃣', '5'],
-    ['5️⃣5️⃣5️⃣', '555'],
-    ['5️⃣ + 5️⃣', '10'],
-    ['5️⃣ * 5️⃣', '25'],
-    ['5️⃣5️⃣ - 5️⃣', '50'],
+    ['5️⃣', '5️⃣'],
+    ['5️⃣5️⃣5️⃣', '5️⃣5️⃣5️⃣'],
+    ['5️⃣ + 5️⃣', '1️⃣0️⃣'],
+    ['5️⃣ * 5️⃣', '2️⃣5️⃣'],
+    ['5️⃣5️⃣ - 5️⃣', '5️⃣0️⃣'],
   ];
 
   test.each(tests)('%#: integer expression eval test:', (input, expected) => {
