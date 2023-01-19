@@ -99,11 +99,19 @@ const evalProgram = (stmts: ast.StatementNode[], env: Environment) => {
 };
 
 const applyFunction = (fn: obj.Object, args: obj.Object[]) => {
-  let f2 = fn as obj.Function;
+  const typ = fn.type();
+  if (typ === obj.FUNCTION_OBJ) {
+    let f2 = fn as obj.Function;
 
-  let extendedEnv = extendedFunctionEnv(f2, args);
-  let res = Eval(f2.body, extendedEnv);
-  return unwrapReturnValue(res);
+    let extendedEnv = extendedFunctionEnv(f2, args);
+    let res = Eval(f2.body, extendedEnv);
+    return unwrapReturnValue(res);
+  } else if (typ === obj.BUILTIN_OBJ) {
+    let f2 = fn as obj.Builtin;
+    return f2.fn(...args);
+  }
+
+  return NULL;
 };
 
 const extendedFunctionEnv = (fn: obj.Function, args: obj.Object[]) => {
@@ -191,10 +199,14 @@ const evalInfixExpression = (op: string, left: obj.Object, right: obj.Object): o
 
 const evalIdentifier = (node: ast.Identifier, env: Environment) => {
   const val = env.get(node.value);
-  if (val === undefined) {
-    return NULL;
+  if (val !== undefined) {
+    return val;
   }
-  return val;
+
+  if (builtins[node.value] !== undefined) {
+    return builtins[node.value];
+  }
+  return NULL;
 };
 
 const evalIfExpression = (expr: ast.IfExpression, env: Environment) => {
@@ -352,3 +364,12 @@ function divideArrays(dividend: number[], divisor: number[]) {
 
   return quotient;
 }
+
+const printFn: obj.BuiltinFunction = (...args: obj.Object[]): obj.Object => {
+  args.forEach((arg) => console.log(arg.inspect()));
+  return NULL;
+};
+
+const builtins: { [k: string]: obj.Builtin } = {
+  print: new obj.Builtin(printFn),
+};

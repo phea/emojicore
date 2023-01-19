@@ -13,6 +13,7 @@ export const BOOLEAN_OBJ: ObjectType = 'BOOLEAN';
 export const RETURN_VALUE_OBJ: ObjectType = 'RETURN_VALUE';
 export const FUNCTION_OBJ: ObjectType = 'FUNCTION';
 export const ITER_OBJ: ObjectType = 'ITER';
+export const BUILTIN_OBJ: ObjectType = 'BUILTIN';
 export const NULL_OBJ: ObjectType = 'NULL';
 
 export class Integer implements Object {
@@ -116,6 +117,23 @@ export class Iter implements Object {
     buf += this.body.toString();
     buf += '\n}';
     return buf;
+  }
+}
+
+export type BuiltinFunction = (...args: Object[]) => Object;
+
+export class Builtin implements Object {
+  fn: BuiltinFunction;
+  constructor(fn: BuiltinFunction) {
+    this.fn = fn;
+  }
+
+  type(): string {
+    return BUILTIN_OBJ;
+  }
+
+  inspect(): string {
+    return 'builtin function';
   }
 }
 
