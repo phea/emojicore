@@ -80,11 +80,13 @@ export const Eval = (node: ast.INode, env: Environment): any => {
 };
 
 const evalIter = (limit: ast.IntegerLiteral, block: ast.BlockStatement, env: Environment) => {
-  let intObj = new obj.Integer(limit.toString());
+  let intObj = new obj.Integer(limit.tokenLiteral());
   let res: obj.Object;
+  intObj.inspect();
   while (intObj.inspect() !== '0') {
     res = Eval(block, env);
     intObj.value = subtractArrays(intObj.value, [1]);
+    intObj.inspect();
   }
   return res;
 };

@@ -94,6 +94,10 @@ textarea:focus {
   outline: none;
 }
 
+pre {
+  text-align: left;
+  font-size: 14px;
+}
 
 .nav-container {
   border: 1px solid var(--light-gray);
@@ -108,22 +112,6 @@ textarea:focus {
 .nav-container .logo {
   font-size: 1.5rem;
   font-weight: bold;
-}
-
-.fight-selector {
-  padding: 7px 20px;
-  background: #13181c;
-  color: white;
-  outline: 1px solid white;
-  font-size: 1rem;
-  margin-left: 20px;
-  font-weight: bold;
-  border: none;
-}
-
-.fight-selector option {
-  padding: 5px;
-  border: none;
 }
 
 .nav-bar {
@@ -179,6 +167,7 @@ textarea:focus {
   height: 440px;
   background: transparent;
   z-index: 20;
+  overflow-y: scroll;
 }
 
 .iframe-output {
@@ -252,33 +241,8 @@ textarea:focus {
   padding-left: 20px;
 }
 
-.output-container h5 {
-  font-size: 0.9rem;
+.output-container pre {
+  font-size: 1.5rem;
+  font-weight: 700;
   margin: 5px 0;
-}
-
-.color-container {
-  width: 300px;
-  background: #0f1117;
-  margin: auto;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 15px;
-  flex-wrap: wrap;
-}
-.color-wrapper {
-  display: flex;
-  flex-direction: row;
-  margin: 5px;
-}
-.color-badge {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 1px solid white;
-  border-radius: 50%;
-  margin: 0 10px;
 }
