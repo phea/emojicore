@@ -49,6 +49,19 @@ export class Lexer {
     this.readPos--;
     return this.input.slice(start, this.pos).join('');
   }
+
+  readEnt() {
+    let digits = '';
+    while (this.peekChar(2) === '⃣') {
+      digits += this.ch;
+      this.readChar();
+      this.readChar();
+      this.readChar();
+    }
+    this.readPos--;
+    return digits;
+  }
+
   skipWhiteSpace() {
     while (this.ch === ' ' || this.ch === '\t' || this.ch === '\n' || this.ch === '\r') {
       this.readChar();
@@ -121,13 +134,11 @@ export class Lexer {
           tok = new Token.Token(Token.IDENT, ident);
         }
       } else if (isDigit(this.ch)) {
-        let num = this.readNum();
         if (this.peekChar(2) === '⃣') {
-          this.readChar();
-          this.readChar();
-          // tok = entTokens[num];
-          // have to read the ents
+          let num = this.readEnt();
+          tok = new Token.Token(Token.ENT, num);
         } else {
+          let num = this.readNum();
           tok = new Token.Token(Token.INT, num);
         }
       } else {

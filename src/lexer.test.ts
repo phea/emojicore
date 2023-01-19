@@ -133,3 +133,28 @@ if (5 < 10) {
     expect(tok.literal).toEqual(literal);
   });
 });
+
+describe('lexer should return right ent token', () => {
+  const input = `let foo = 1️⃣; let bar = 1️⃣1️⃣1️⃣;`;
+
+  let tests = [
+    [Token.LET, 'let'],
+    [Token.IDENT, 'foo'],
+    [Token.ASSIGN, '='],
+    [Token.ENT, '1'],
+    [Token.SEMICOLON, ';'],
+    [Token.LET, 'let'],
+    [Token.IDENT, 'bar'],
+    [Token.ASSIGN, '='],
+    [Token.ENT, '111'],
+    [Token.SEMICOLON, ';'],
+    [Token.EOF, 'eof'],
+  ];
+
+  let lex = new Lexer(input);
+  test.each(tests)('expected token to be type %s with literal %s', (type, literal) => {
+    let tok = lex.nextToken();
+    expect(tok.type).toEqual(type);
+    expect(tok.literal).toEqual(literal);
+  });
+});
