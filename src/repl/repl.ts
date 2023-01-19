@@ -4,6 +4,7 @@ import Token = require('../token');
 import pkg = require('../lexer');
 import { Parser } from '../parser';
 import { Eval } from '../eval';
+import { Environment } from '../env';
 const { Lexer } = pkg;
 
 const printf = function (...args: any[]): number {
@@ -25,6 +26,8 @@ const rl = readline.createInterface({
   terminal: false,
 });
 
+const env = new Environment();
+
 rl.on('line', (line) => {
   if (line === '.help') {
     printf('%s', HELP);
@@ -34,7 +37,7 @@ rl.on('line', (line) => {
     const program = p.parseProgram();
 
     // TODO: handle errors;
-    let res = Eval(program);
+    let res = Eval(program, env);
     if (res !== undefined) {
       printf('%s\n', res.inspect());
     }

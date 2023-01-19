@@ -2,6 +2,7 @@ import { Eval } from './eval';
 import Lexer from './lexer';
 import { Parser } from './parser';
 import * as obj from './object';
+import { Environment } from './env';
 
 describe('should evaluate integer literals', () => {
   const tests = [
@@ -14,7 +15,7 @@ describe('should evaluate integer literals', () => {
     const p = new Parser(lex);
     const program = p.parseProgram();
 
-    let res = Eval(program) as obj.Integer;
+    let res = Eval(program, new Environment()) as obj.Integer;
     expect(res.inspect()).toBe(expected);
   });
 });
@@ -30,7 +31,7 @@ describe('should evaluate boolean', () => {
     const p = new Parser(lex);
     const program = p.parseProgram();
 
-    let res = Eval(program) as obj.Boolean;
+    let res = Eval(program, new Environment()) as obj.Boolean;
     console.log('what is res:', res);
     expect(res.value).toBe(expected);
   });
@@ -49,7 +50,7 @@ describe('should evaluate bang operator', () => {
     const p = new Parser(lex);
     const program = p.parseProgram();
 
-    let res = Eval(program) as obj.Boolean;
+    let res = Eval(program, new Environment()) as obj.Boolean;
     expect(res.value).toBe(expected);
   });
 });
@@ -77,7 +78,7 @@ describe('should evaluate integer expression', () => {
     const p = new Parser(lex);
     const program = p.parseProgram();
 
-    let res = Eval(program) as obj.Integer;
+    let res = Eval(program, new Environment()) as obj.Integer;
     expect(res.inspect()).toBe(expected);
   });
 });
@@ -109,7 +110,7 @@ describe('should evaluate boolean expression', () => {
     const p = new Parser(lex);
     const program = p.parseProgram();
 
-    let res = Eval(program) as obj.Boolean;
+    let res = Eval(program, new Environment()) as obj.Boolean;
     expect(res.value).toBe(expected);
   });
 });
@@ -129,7 +130,7 @@ describe('should evaluate if-else expression', () => {
     const p = new Parser(lex);
     const program = p.parseProgram();
 
-    let res = Eval(program) as obj.Object;
+    let res = Eval(program, new Environment()) as obj.Object;
     expect(res.inspect()).toBe(expected);
   });
 });
@@ -147,7 +148,7 @@ describe('should evaluate return statement', () => {
     const p = new Parser(lex);
     const program = p.parseProgram();
 
-    let res = Eval(program) as obj.Object;
+    let res = Eval(program, new Environment()) as obj.Object;
     expect(res.inspect()).toBe(expected);
   });
 
@@ -165,7 +166,25 @@ describe('should evaluate return statement', () => {
     const p = new Parser(lex);
     const program = p.parseProgram();
 
-    let res = Eval(program) as obj.Object;
+    let res = Eval(program, new Environment()) as obj.Object;
     expect(res.inspect()).toBe('10');
+  });
+});
+
+describe('should evaluate let statements', () => {
+  const tests = [
+    ['let a = 5; a;', '5'],
+    ['let a = 5 * 5; a;', '25'],
+    ['let a = 5; let b = a; b;', '5'],
+    ['let a = 5; let b = a; let c = a + b + 5; c;', '15'],
+  ];
+
+  test.each(tests)('%#: let statement eval test:', (input, expected) => {
+    const lex = new Lexer(String(input));
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    let res = Eval(program, new Environment()) as obj.Integer;
+    expect(res.inspect()).toBe(expected);
   });
 });

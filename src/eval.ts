@@ -1,4 +1,5 @@
 import * as ast from './ast';
+import { Environment } from './env';
 import * as obj from './object';
 
 const NULL = new obj.Null();
@@ -12,15 +13,15 @@ const nativeBoolToBoolObject = (input: boolean) => {
   return FALSE;
 };
 
-export const Eval = (node: ast.INode): any => {
+export const Eval = (node: ast.INode, env: Environment): any => {
   let typ = node.constructor.name;
   // console.log(typ);
   if (typ === 'Program') {
     let n2 = node as ast.Program;
-    return evalProgram(n2.statements);
+    return evalProgram(n2.statements, env);
   } else if (typ === 'ExpressionStatement') {
     let n2 = node as ast.ExpressionStatement;
-    return Eval(n2.expression);
+    return Eval(n2.expression, env);
   } else if (typ === 'IntegerLiteral') {
     let n2 = node as ast.IntegerLiteral;
     return new obj.Integer(n2.tokenLiteral());
@@ -29,27 +30,34 @@ export const Eval = (node: ast.INode): any => {
     return new obj.Boolean(n2.value);
   } else if (typ === 'BangExpression') {
     let n2 = node as ast.BangExpression;
-    return evalPrefixExpression('!', Eval(n2.right));
+    return evalPrefixExpression('!', Eval(n2.right, env));
   } else if (typ === 'InfixExpression') {
     let n2 = node as ast.InfixExpression;
-    return evalInfixExpression(n2.tokenLiteral(), Eval(n2.left), Eval(n2.right));
+    return evalInfixExpression(n2.tokenLiteral(), Eval(n2.left, env), Eval(n2.right, env));
   } else if (typ === 'IfExpression') {
     let n2 = node as ast.IfExpression;
-    return evalIfExpression(n2);
+    return evalIfExpression(n2, env);
   } else if (typ === 'BlockStatement') {
     let n2 = node as ast.BlockStatement;
-    return evalBlockStatement(n2.statements);
+    return evalBlockStatement(n2.statements, env);
   } else if (typ === 'ReturnStatement') {
     let n2 = node as ast.ReturnStatement;
-    return new obj.ReturnValue(Eval(n2.returnValue));
+    return new obj.ReturnValue(Eval(n2.returnValue, env));
+  } else if (typ === 'LetStatement') {
+    let n2 = node as ast.LetStatement;
+    let val = Eval(n2.value, env);
+    env.set(n2.name.value, val);
+  } else if (typ === 'Identifier') {
+    let n2 = node as ast.Identifier;
+    return evalIdentifier(n2, env);
   }
 };
 
-const evalProgram = (stmts: ast.StatementNode[]) => {
+const evalProgram = (stmts: ast.StatementNode[], env: Environment) => {
   let res: obj.Object;
   for (let i = 0; i < stmts.length; i++) {
-    res = Eval(stmts[i]);
-    if (res.type() === obj.RETURN_VALUE_OBJ) {
+    res = Eval(stmts[i], env);
+    if (res !== undefined && res.type() === obj.RETURN_VALUE_OBJ) {
       let r2 = res as obj.ReturnValue;
       return r2.value;
     }
@@ -57,10 +65,10 @@ const evalProgram = (stmts: ast.StatementNode[]) => {
   return res;
 };
 
-const evalBlockStatement = (stmts: ast.StatementNode[]) => {
+const evalBlockStatement = (stmts: ast.StatementNode[], env: Environment) => {
   let res: obj.Object;
   for (let i = 0; i < stmts.length; i++) {
-    res = Eval(stmts[i]);
+    res = Eval(stmts[i], env);
     if (res !== undefined && res.type() === obj.RETURN_VALUE_OBJ) {
       return res;
     }
@@ -116,12 +124,20 @@ const evalInfixExpression = (op: string, left: obj.Object, right: obj.Object): o
   }
 };
 
-const evalIfExpression = (expr: ast.IfExpression) => {
-  let condition = Eval(expr.condition) as obj.Boolean;
+const evalIdentifier = (node: ast.Identifier, env: Environment) => {
+  const val = env.get(node.value);
+  if (val === undefined) {
+    return NULL;
+  }
+  return val;
+};
+
+const evalIfExpression = (expr: ast.IfExpression, env: Environment) => {
+  let condition = Eval(expr.condition, env) as obj.Boolean;
   if (condition.value) {
-    return Eval(expr.consequence);
+    return Eval(expr.consequence, env);
   } else if (expr.alternative !== undefined) {
-    return Eval(expr.alternative);
+    return Eval(expr.alternative, env);
   } else {
     return NULL;
   }
