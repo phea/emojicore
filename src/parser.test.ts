@@ -82,6 +82,23 @@ describe('parser should handle integer literals', () => {
   });
 });
 
+describe('parser should handle enteger literals', () => {
+  test('enteger literals', () => {
+    const input = '1️⃣';
+    const lex = new Lexer(input);
+    const p = new Parser(lex);
+    const program = p.parseProgram();
+
+    console.log(program);
+    expect(program.statements.length).toEqual(1);
+    expect(program.statements[0]).toBeInstanceOf(ast.ExpressionStatement);
+    const token = new Token(tok.ENT, '1');
+    const stmt = Object.assign(new ast.ExpressionStatement(token), program.statements[0]);
+    expect(stmt.token.literal).toBe('1');
+    expect(stmt.expression.toString()).toBe('1️⃣');
+  });
+});
+
 describe('parser should handle bang operator', () => {
   let tests = [['!5;', '5']];
 

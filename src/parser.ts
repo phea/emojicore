@@ -47,6 +47,7 @@ export class Parser {
     // Register prefix parse tokens
     this.registerPrefix(tok.IDENT, () => new ast.Identifier(this.curToken.literal));
     this.registerPrefix(tok.INT, this.parseIntegerLiteral);
+    this.registerPrefix(tok.ENT, this.parseEntegerLiteral);
     this.registerPrefix(tok.BANG, this.parseBangExpression);
     this.registerPrefix(tok.TRUE, this.parseBoolean);
     this.registerPrefix(tok.FALSE, this.parseBoolean);
@@ -162,6 +163,10 @@ export class Parser {
 
   parseIntegerLiteral() {
     return new ast.IntegerLiteral(this.curToken.literal);
+  }
+
+  parseEntegerLiteral() {
+    return new ast.EntegerLiteral(this.curToken.literal);
   }
 
   parseBangExpression() {

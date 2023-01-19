@@ -122,6 +122,28 @@ export class IntegerLiteral extends Node implements ExpressionNode {
   }
 }
 
+export class EntegerLiteral extends Node implements ExpressionNode {
+  value: string;
+  constructor(value: string) {
+    super(new Token(tok.ENT, value));
+    this.value = value;
+  }
+
+  expressionNode(): void {
+    //
+  }
+
+  tokenLiteral(): string {
+    return this.token.literal;
+  }
+
+  toString(): string {
+    var buf = '';
+    this.value.split('').forEach((ch) => (buf += `${ch}\uFE0F\u20E3`));
+    return buf;
+  }
+}
+
 export class Boolean extends Node implements ExpressionNode {
   value: boolean;
   constructor(val: boolean) {
