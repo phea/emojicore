@@ -6,8 +6,8 @@ Emojicore is a fun toy programming language that allows you to express integers 
 
 ## Types
 
-- Integers: non-negative integers
-- Entegers: non-negative integers represented in emoji form.
+- Integers: non-negative integers of arbitrary length
+- Entegers: non-negative integers of arbitrary length, represented in emoji form.
 - Booleans: true or false
 
 ## Explore
