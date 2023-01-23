@@ -1,5 +1,7 @@
 # 🤘 emojicore
 
+![emojicore-web-ide-sized](https://user-images.githubusercontent.com/950371/214120471-898e59fc-dff8-4ce5-b2ba-9718ed106c05.png)
+
 Emojicore is a fun toy programming language that allows you to express integers in the form of emojis, called 'entegers'. In addition to entegers, Emojicore also supports booleans and non-negative integers. With Emojicore, you can perform basic arithmetic operations and logical operations using a combination of entegers, booleans, and integers.
 
 ## Types
